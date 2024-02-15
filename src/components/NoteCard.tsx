@@ -1,15 +1,62 @@
-export function NoteCard() {
-  return (
-    <button className='rounded-md text-start bg-slate-800 p-5 space-y-3 overflow-hidden relative outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400'>
-      <span className='text-sm font-medium text-slate-300'>
-        Há 4 dias
-      </span>
-      <p className='text-slate-400 leading-6 text-sm'>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quidem eius hic laudantium impedit, ratione esse earum quae consequatur similique obcaecati sit labore consequuntur vero odio at est non dolorem.
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quidem eius hic laudantium impedit, ratione esse earum quae consequatur similique obcaecati sit labore consequuntur vero odio at est non dolorem.
-      </p>
-      <div className='absolute bottom-0 right-0 left-0 h-1/2 bg-gradient-to-t from-black/60 to-black/0 pointer-events-none'/>
+import * as Dialog from '@radix-ui/react-dialog';
+import { X } from 'lucide-react'
+import { formatDistanceToNow } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+ 
+interface NoteCardProps {
+  note: {
+    id: string,
+    content: string,
+    createdAt: Date
+  }
+  onDeleteNote: (noteId: string) => void
+}
 
-    </button>
+export function NoteCard({ note, onDeleteNote }: NoteCardProps) {
+
+  return (
+    <Dialog.Root>
+      <Dialog.Trigger className='rounded-md text-start flex flex-col bg-slate-800 p-5 gap-3 overflow-hidden relative outline-none hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400'>
+        <span className='text-sm font-medium text-slate-300'>
+          {formatDistanceToNow(note.createdAt, {
+            locale: ptBR,
+            addSuffix: true
+          })}
+        </span>
+        <p className='text-slate-400 leading-6 text-sm'>
+          {note.content}
+        </p>
+        <div className='absolute bottom-0 right-0 left-0 h-1/2 bg-gradient-to-t from-black/60 to-black/0 pointer-events-none'/>
+
+      </Dialog.Trigger>
+
+      <Dialog.Portal>
+        <Dialog.Overlay className='inset-0 fixed bg-black/50' />
+        <Dialog.Content className='fixed overflow-hidden inset-0 md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:max-w-[640px] w-full md:h-[60vh] bg-slate-700 rounded-md flex flex-col outline-none'>
+          <Dialog.Close className='absolute right-0 top-0 bg-slate-800 p-1.5 text-slate-400 hover:text-slate-100'>
+            <X className='size-5'/>
+          </Dialog.Close>
+
+          <div className='flex flex-1 flex-col gap-3 p-5'>
+            <span className='text-sm font-medium text-slate-300'>
+              {formatDistanceToNow(note.createdAt, {
+                locale: ptBR,
+                addSuffix: true
+              })}
+            </span>
+            <p className='text-slate-400 leading-6 text-sm'>
+              {note.content}
+            </p>
+          </div>
+          <button
+          type='button'
+          onClick={() => onDeleteNote(note.id)}
+          className='w-full bg-slate-800 py-4 text-center text-sm text-slate-300 outline-none font-medium group'
+          >
+            Deseja <span className='text-red-400 group-hover:underline'>apagar essa nota?</span>
+          </button>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   )
 }

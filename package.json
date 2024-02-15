@@ -10,8 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.0.5",
+    "@types/dom-speech-recognition": "^0.0.4",
+    "date-fns": "^3.3.1",
+    "lucide-react": "^0.330.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "sonner": "^1.4.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.55",
